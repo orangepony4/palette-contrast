@@ -2,6 +2,8 @@
     'use strict';
 
     const paletteLimit = 12;
+    const sharePrefix = '#pc1=';
+    const shareHashLimit = sharePrefix.length + 8 + (paletteLimit + 1) * 7;
 
     function parseHex(value, { allowAlpha = true } = {}) {
         if (typeof value !== 'string') return null;
@@ -83,7 +85,45 @@
         return { colors: [...colors], invalid, overflow };
     }
 
-    const api = { parseHex, evaluateContrast, bestForeground, parsePalette };
+    function normalizeShareState(state) {
+        if (!Array.isArray(state?.palette) || state.palette.length < 2 || state.palette.length > paletteLimit) {
+            return null;
+        }
+        const foreground = parseHex(state.foreground);
+        const background = parseHex(state.background, { allowAlpha: false });
+        if (!foreground || !background) return null;
+
+        const palette = new Set();
+        for (const token of state.palette) {
+            const color = parseHex(token, { allowAlpha: false });
+            if (!color || palette.has(color.hex)) return null;
+            palette.add(color.hex);
+        }
+        return { foreground: foreground.hex, background: background.hex, palette: [...palette] };
+    }
+
+    function encodeShareState(state) {
+        const colors = normalizeShareState(state);
+        if (!colors) return null;
+        return sharePrefix + [colors.foreground, colors.background, ...colors.palette]
+            .map(hex => hex.slice(1))
+            .join(',');
+    }
+
+    function decodeShareState(hash) {
+        if (typeof hash !== 'string' || hash.length > shareHashLimit || !hash.startsWith(sharePrefix)) {
+            return null;
+        }
+        const colors = hash.slice(sharePrefix.length);
+        // Compare the entire match because $ also matches before a final newline.
+        if (/^[0-9a-f]{6}(?:[0-9a-f]{2})?(?:,[0-9a-f]{6})+$/i.exec(colors)?.[0] !== colors) {
+            return null;
+        }
+        const [foreground, background, ...palette] = colors.split(',');
+        return normalizeShareState({ foreground, background, palette });
+    }
+
+    const api = { parseHex, evaluateContrast, bestForeground, parsePalette, encodeShareState, decodeShareState };
     if (typeof module === 'object' && module.exports) {
         module.exports = api;
     } else {

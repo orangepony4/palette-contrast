@@ -1,7 +1,7 @@
 (() => {
     'use strict';
 
-    const { parseHex, evaluateContrast, bestForeground, parsePalette } = globalThis.PaletteContrast;
+    const { parseHex, evaluateContrast, bestForeground, parsePalette, encodeShareState, decodeShareState } = globalThis.PaletteContrast;
     const byId = id => document.getElementById(id);
     const foregroundHex = byId('foregroundHex');
     const backgroundHex = byId('backgroundHex');
@@ -20,6 +20,10 @@
     const paletteError = byId('paletteError');
     const matrixTable = byId('matrixTable');
     const selectedPair = byId('selectedPair');
+    const copyShare = byId('copyShare');
+    const shareFallback = byId('shareFallback');
+    const shareOutput = byId('shareOutput');
+    const shareStatus = byId('shareStatus');
     const criteria = [
         ['normalAA', byId('statusNormalAA')],
         ['largeAA', byId('statusLargeAA')],
@@ -29,8 +33,10 @@
 
     let foreground;
     let background;
+    let matrixColors = [];
     let matrixButtons = [];
     let matrixTabStop = null;
+    let shareAttempt;
 
     function ratioLabel(ratio) {
         // Round down for display so a value below a threshold never looks like a pass.
@@ -64,6 +70,7 @@
         bestText.disabled = !background;
         swapPair.disabled = !background || !foreground || foreground.a !== 1;
         copyCss.disabled = !background || !foreground;
+        refreshShare();
         refreshMatrixSelection();
 
         if (background) {
@@ -172,6 +179,8 @@
 
         paletteInput.setAttribute('aria-invalid', 'false');
         paletteError.textContent = '';
+        matrixColors = colors;
+        refreshShare();
         const parsed = colors.map(hex => parseHex(hex, { allowAlpha: false }));
         const caption = document.createElement('caption');
         caption.className = 'sr-only';
@@ -198,6 +207,23 @@
         matrixTabStop = null;
         refreshMatrixSelection();
         setMatrixTabStop(matrixTable.querySelector('[aria-pressed="true"]') || matrixButtons[0][0]);
+    }
+
+    function refreshShare() {
+        shareAttempt = null;
+        copyShare.disabled = !foreground || !background || matrixColors.length < 2;
+        shareFallback.hidden = true;
+        shareOutput.value = '';
+        shareStatus.textContent = '';
+    }
+
+    function restoreShare() {
+        const shared = decodeShareState(location.hash);
+        if (!shared) return false;
+        paletteInput.value = shared.palette.join(' ');
+        applyPair(shared.foreground, shared.background);
+        buildMatrix();
+        return true;
     }
 
     foregroundHex.addEventListener('input', refreshPair);
@@ -239,6 +265,30 @@
             actionStatus.textContent = 'CSS selected. Press Ctrl+C or Command+C to copy it.';
         }
     });
+    copyShare.addEventListener('click', async () => {
+        const hash = encodeShareState({ foreground: foreground?.hex, background: background?.hex, palette: matrixColors });
+        if (!hash) return;
+        const base = /^https?:$/.test(location.protocol)
+            ? location.origin + location.pathname
+            : 'https://orangepony4.github.io/palette-contrast/';
+        const url = base + hash;
+        const attempt = Symbol();
+        shareAttempt = attempt;
+        try {
+            await navigator.clipboard.writeText(url);
+            if (shareAttempt !== attempt) return;
+            shareFallback.hidden = true;
+            shareOutput.value = '';
+            shareStatus.textContent = 'Share link copied.';
+        } catch {
+            if (shareAttempt !== attempt) return;
+            shareFallback.hidden = false;
+            shareOutput.value = url;
+            shareOutput.focus();
+            shareOutput.select();
+            shareStatus.textContent = 'Link selected. Press Ctrl+C or Command+C to copy it.';
+        }
+    });
     byId('buildPalette').addEventListener('click', buildMatrix);
     matrixTable.addEventListener('click', event => {
         const button = event.target.closest('.matrix-cell');
@@ -273,6 +323,9 @@
         next.focus();
     });
 
-    refreshPair();
-    buildMatrix();
+    window.addEventListener('hashchange', restoreShare);
+    if (!restoreShare()) {
+        refreshPair();
+        buildMatrix();
+    }
 })();

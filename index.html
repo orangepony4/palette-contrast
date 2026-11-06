@@ -143,6 +143,17 @@
             <div id="matrixRegion" class="matrix-region" role="region" aria-label="Palette contrast matrix" aria-describedby="matrixHelp" tabindex="0">
                 <table id="matrixTable" class="matrix-table" aria-label="Foreground and background contrast ratios"></table>
             </div>
+            <div class="share-panel">
+                <div class="label-row">
+                    <p id="shareHelp" class="help">Share the selected colors and the current matrix in one link.</p>
+                    <button class="button secondary" type="button" id="copyShare" aria-describedby="shareHelp" disabled>Copy share link</button>
+                </div>
+                <div id="shareFallback" hidden>
+                    <label for="shareOutput">Share link</label>
+                    <input id="shareOutput" type="text" readonly spellcheck="false">
+                </div>
+                <p class="form-message" id="shareStatus" role="status"></p>
+            </div>
         </section>
     </main>
 
