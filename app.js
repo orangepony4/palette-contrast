@@ -1,7 +1,10 @@
 (() => {
     'use strict';
 
-    const { parseHex, evaluateContrast, bestForeground, parsePalette, encodeShareState, decodeShareState } = globalThis.PaletteContrast;
+    const {
+        parseHex, evaluateContrast, bestForeground, parsePalette,
+        encodeShareState, decodeShareState, adjustForeground,
+    } = globalThis.PaletteContrast;
     const byId = id => document.getElementById(id);
     const foregroundHex = byId('foregroundHex');
     const backgroundHex = byId('backgroundHex');
@@ -16,6 +19,9 @@
     const copyCss = byId('copyCss');
     const cssOutput = byId('cssOutput');
     const actionStatus = byId('actionStatus');
+    const adjustMinimum = byId('adjustMinimum');
+    const adjustText = byId('adjustText');
+    const adjustStatus = byId('adjustStatus');
     const paletteInput = byId('paletteInput');
     const paletteError = byId('paletteError');
     const matrixTable = byId('matrixTable');
@@ -61,6 +67,7 @@
 
     function refreshPair() {
         actionStatus.textContent = '';
+        adjustStatus.textContent = '';
         foreground = parseHex(foregroundHex.value);
         background = parseHex(backgroundHex.value, { allowAlpha: false });
         foregroundHex.setAttribute('aria-invalid', String(!foreground));
@@ -70,6 +77,7 @@
         bestText.disabled = !background;
         swapPair.disabled = !background || !foreground || foreground.a !== 1;
         copyCss.disabled = !background || !foreground;
+        adjustText.disabled = !background || !foreground;
         refreshShare();
         refreshMatrixSelection();
 
@@ -253,6 +261,22 @@
         const best = bestForeground(background);
         applyPair(best, background.hex);
         actionStatus.textContent = `Applied ${best} as the text color.`;
+    });
+    adjustMinimum.addEventListener('change', () => {
+        adjustStatus.textContent = '';
+    });
+    adjustText.addEventListener('click', () => {
+        if (!foreground || !background) return;
+        const minimum = Number(adjustMinimum.value);
+        const candidate = adjustForeground(foreground, background, minimum);
+        if (!candidate) {
+            adjustStatus.textContent = `This background and text opacity cannot reach ${minimum}:1.`;
+        } else if (candidate.hex === foreground.hex) {
+            adjustStatus.textContent = `This text color already meets ${minimum}:1.`;
+        } else {
+            applyPair(candidate.hex, background.hex);
+            adjustStatus.textContent = `Adjusted text to ${candidate.hex} at ${ratioLabel(candidate.ratio)}.`;
+        }
     });
     copyCss.addEventListener('click', async () => {
         if (!cssOutput.value) return;

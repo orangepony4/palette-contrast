@@ -65,6 +65,33 @@
         return blackRatio >= whiteRatio ? '#000000' : '#FFFFFF';
     }
 
+    function blendForeground({ r, g, b, a }, target, step) {
+        const mix = channel => Math.round((channel * (255 - step) + target * step) / 255);
+        return { r: mix(r), g: mix(g), b: mix(b), a };
+    }
+
+    function adjustForeground(foreground, background, minimum) {
+        if (![3, 4.5, 7].includes(minimum)) {
+            throw new RangeError('Minimum contrast must be 3, 4.5, or 7.');
+        }
+        const original = evaluateContrast(foreground, background);
+        if (original.ratio >= minimum) return { hex: foreground.hex, ratio: original.ratio };
+
+        // Test both paths at the same quantized distance before moving farther.
+        for (let step = 1; step <= 255; step++) {
+            const black = blendForeground(foreground, 0, step);
+            const white = blendForeground(foreground, 255, step);
+            const blackRatio = evaluateContrast(black, background).ratio;
+            const whiteRatio = evaluateContrast(white, background).ratio;
+            if (blackRatio < minimum && whiteRatio < minimum) continue;
+
+            const { r, g, b } = blackRatio >= whiteRatio ? black : white;
+            const rgb = [r, g, b].map(channel => channel.toString(16).padStart(2, '0')).join('').toUpperCase();
+            return { hex: '#' + rgb + foreground.hex.slice(7), ratio: Math.max(blackRatio, whiteRatio) };
+        }
+        return null;
+    }
+
     function parsePalette(text) {
         const colors = new Set();
         const invalid = [];
@@ -123,7 +150,9 @@
         return normalizeShareState({ foreground, background, palette });
     }
 
-    const api = { parseHex, evaluateContrast, bestForeground, parsePalette, encodeShareState, decodeShareState };
+    const api = {
+        parseHex, evaluateContrast, bestForeground, adjustForeground, parsePalette, encodeShareState, decodeShareState,
+    };
     if (typeof module === 'object' && module.exports) {
         module.exports = api;
     } else {

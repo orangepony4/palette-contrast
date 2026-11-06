@@ -112,6 +112,24 @@
                         <dd id="statusLargeAAA" class="check-pill">—</dd>
                     </div>
                 </dl>
+                <div class="adjustment">
+                    <div>
+                        <h3>Adjust foreground</h3>
+                        <p class="help" id="adjustHelp">The adjustment mixes the foreground toward black or white and keeps its opacity.</p>
+                    </div>
+                    <div class="adjustment-controls">
+                        <div>
+                            <label for="adjustMinimum">Minimum contrast</label>
+                            <select id="adjustMinimum">
+                                <option value="3">3:1</option>
+                                <option value="4.5" selected>4.5:1</option>
+                                <option value="7">7:1</option>
+                            </select>
+                        </div>
+                        <button class="button primary" type="button" id="adjustText" aria-describedby="adjustHelp">Adjust text color</button>
+                    </div>
+                    <p class="form-message adjustment-status" id="adjustStatus" role="status"></p>
+                </div>
             </div>
         </section>
 

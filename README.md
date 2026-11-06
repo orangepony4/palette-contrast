@@ -12,6 +12,7 @@ Check text and background colors, then compare an entire palette before using it
 - Paste two to twelve different opaque colors, separated by spaces, newlines, commas, or semicolons, to build a palette matrix. Rows are text colors and columns are backgrounds.
 - Select a cell to apply the pair. In the matrix, use the arrow keys to move, Home and End to reach row edges, and Enter or Space to apply.
 - Try black or white text, swap opaque colors, or copy the selected pair as CSS.
+- To keep a similar foreground, choose a threshold and select **Adjust text color**. The tool mixes the current color toward black or white by the smallest tested amount that passes, while keeping its opacity and the background.
 - Use **Copy share link** to share the current pair and built matrix. The colors are stored in the URL fragment and the app makes no network request when you copy the link.
 
 ## How the checks work
@@ -27,6 +28,6 @@ Large text is at least 18 points at regular weight or 14 points in bold. These c
 
 ## Development
 
-Run `npm test` with Node.js 20 or newer. The test suite covers hex parsing, luminance, alpha compositing, unrounded threshold decisions, palette parsing, and share links.
+Run `npm test` with Node.js 20 or newer. The test suite covers hex parsing, luminance, alpha compositing, unrounded threshold decisions, foreground adjustment, palette parsing, and share links.
 
 Released under the [MIT License](LICENSE).
