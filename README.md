@@ -6,7 +6,11 @@ Check text and background colors, then compare an entire palette before using it
 
 ## Use the tool
 
-[Open Palette Contrast](https://orangepony4.github.io/palette-contrast/) or open `index.html` from a downloaded or cloned copy. Enter text and background colors in hex or use the native color pickers. The preview and contrast checks update as you type.
+[Open Palette Contrast](https://orangepony4.github.io/palette-contrast/) · [Download the v0.1.0 offline ZIP](https://github.com/orangepony4/palette-contrast/releases/download/v0.1.0/palette-contrast-0.1.0-offline.zip)
+
+For offline use, extract the ZIP and open `index.html`. Enter text and background colors in hex or use the native color pickers. The preview and contrast checks update as you type.
+
+![Palette Contrast showing hex color inputs, a live text preview with a 12.60:1 ratio, WCAG results, and a five-color contrast matrix](docs/preview.webp)
 
 - The text color accepts `#RGB`, `#RGBA`, `#RRGGBB`, and `#RRGGBBAA`. A translucent text color is composited over the selected opaque background.
 - Paste two to twelve different opaque colors, separated by spaces, newlines, commas, or semicolons, to build a palette matrix. Rows are text colors and columns are backgrounds.
