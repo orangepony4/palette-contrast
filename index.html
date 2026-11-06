@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src data:; base-uri 'none'; form-action 'none'">
+    <title>Palette Contrast · WCAG text contrast checker</title>
+    <meta name="description" content="Check text and background colors against WCAG contrast thresholds and compare a full palette in your browser.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23231B36'/%3E%3Ccircle cx='28' cy='29' r='15' fill='%23FFDDA7'/%3E%3Ccircle cx='39' cy='37' r='13' fill='%238F79D7'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+    <script src="contrast.js" defer></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+<div class="page">
+    <header class="masthead">
+        <p class="brand"><span class="brand-mark" aria-hidden="true"></span> Palette Contrast</p>
+        <p class="local-label">Runs in your browser</p>
+    </header>
+
+    <main>
+        <div class="intro">
+            <div>
+                <p class="kicker">WCAG 2.2 · Text contrast</p>
+                <h1>Check text contrast</h1>
+            </div>
+            <p class="intro-copy">Test a foreground and background pair, then see which colors in your palette work together.</p>
+        </div>
+        <noscript><p class="noscript">Enable JavaScript in your browser to calculate contrast.</p></noscript>
+
+        <section class="surface" aria-labelledby="pairHeading">
+            <div class="section-heading">
+                <div>
+                    <p class="kicker">01 · Contrast</p>
+                    <h2 id="pairHeading">Check a color pair</h2>
+                </div>
+                <button class="button secondary" type="button" id="swapPair"><span aria-hidden="true">⇄</span> Swap colors</button>
+            </div>
+
+            <div class="pair-grid">
+                <div class="pair-controls">
+                    <div class="color-fields">
+                        <div class="color-field">
+                            <label for="foregroundHex">Foreground</label>
+                            <div class="color-entry">
+                                <input type="color" id="foregroundPicker" value="#ffdda7" aria-label="Pick a foreground color">
+                                <input type="text" id="foregroundHex" value="#FFDDA7" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hexHelp pairError">
+                            </div>
+                        </div>
+                        <div class="color-field">
+                            <label for="backgroundHex">Background</label>
+                            <div class="color-entry">
+                                <input type="color" id="backgroundPicker" value="#231b36" aria-label="Pick a background color">
+                                <input type="text" id="backgroundHex" value="#231B36" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hexHelp pairError">
+                            </div>
+                        </div>
+                    </div>
+                    <p class="help" id="hexHelp">Use 3 or 6 hex digits for backgrounds. Foregrounds also accept 4 or 8 digits with alpha.</p>
+                    <p class="form-message error" id="pairError" role="status"></p>
+
+                    <div class="suggestion">
+                        <p id="bestTextHint" class="help">Find the stronger black or white text color for this background.</p>
+                        <button class="button secondary" type="button" id="bestText" aria-describedby="bestTextHint">Use suggested text</button>
+                    </div>
+
+                    <div class="css-export">
+                        <div class="label-row">
+                            <label for="cssOutput">CSS declarations</label>
+                            <button class="button secondary" type="button" id="copyCss">Copy CSS</button>
+                        </div>
+                        <textarea id="cssOutput" rows="4" readonly spellcheck="false"></textarea>
+                        <p class="form-message" id="actionStatus" role="status"></p>
+                    </div>
+                </div>
+
+                <div class="preview-result">
+                    <div class="preview" id="preview" aria-hidden="true">
+                        <p class="preview-tag">Live preview</p>
+                        <p class="preview-title">Readable by design</p>
+                        <p class="preview-copy">This sample uses your foreground and background colors.</p>
+                    </div>
+                    <div class="ratio-strip">
+                        <div>
+                            <p id="ratioLabel" class="kicker">Contrast ratio</p>
+                            <output id="ratioValue" aria-labelledby="ratioLabel" aria-live="polite" aria-atomic="true">—</output>
+                        </div>
+                        <p class="help">Higher ratios give text more contrast against the background.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thresholds">
+                <div class="threshold-heading">
+                    <h3>WCAG text thresholds</h3>
+                    <p class="help">Large text starts at 18 pt (24 CSS px), or 14 pt (about 18.7 CSS px) in bold type.</p>
+                </div>
+                <dl class="threshold-grid">
+                    <div class="threshold-card">
+                        <dt><strong>AA · Normal</strong><small>4.5:1 minimum</small></dt>
+                        <dd id="statusNormalAA" class="check-pill">—</dd>
+                    </div>
+                    <div class="threshold-card">
+                        <dt><strong>AA · Large</strong><small>3:1 minimum</small></dt>
+                        <dd id="statusLargeAA" class="check-pill">—</dd>
+                    </div>
+                    <div class="threshold-card">
+                        <dt><strong>AAA · Normal</strong><small>7:1 minimum</small></dt>
+                        <dd id="statusNormalAAA" class="check-pill">—</dd>
+                    </div>
+                    <div class="threshold-card">
+                        <dt><strong>AAA · Large</strong><small>4.5:1 minimum</small></dt>
+                        <dd id="statusLargeAAA" class="check-pill">—</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <section class="surface palette" aria-labelledby="paletteHeading">
+            <div class="section-heading">
+                <div>
+                    <p class="kicker">02 · Palette</p>
+                    <h2 id="paletteHeading">Compare a palette</h2>
+                </div>
+                <span class="section-note">AA normal text · 4.5:1</span>
+            </div>
+            <div class="palette-controls">
+                <div>
+                    <label for="paletteInput">Palette colors</label>
+                    <textarea id="paletteInput" rows="2" spellcheck="false" aria-describedby="paletteHelp paletteError">#231B36 #FFDDA7 #8F79D7 #F7F4FF #5B4D68</textarea>
+                    <p class="help" id="paletteHelp">Enter 2–12 opaque hex colors. Separate them with spaces, line breaks, commas, or semicolons.</p>
+                </div>
+                <button class="button primary" type="button" id="buildPalette">Build matrix</button>
+            </div>
+            <p class="form-message error" id="paletteError" role="status"></p>
+
+            <div class="matrix-intro">
+                <div>
+                    <h3>Contrast matrix</h3>
+                    <p class="help" id="matrixHelp">Foreground colors are rows and backgrounds are columns. Arrow keys move between cells, and Home and End move to the ends of a row. Enter or Space loads the pair above.</p>
+                </div>
+                <p class="selected-pair" id="selectedPair" role="status"></p>
+            </div>
+            <div id="matrixRegion" class="matrix-region" role="region" aria-label="Palette contrast matrix" aria-describedby="matrixHelp" tabindex="0">
+                <table id="matrixTable" class="matrix-table" aria-label="Foreground and background contrast ratios"></table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Palette Contrast</p>
+        <p>WCAG 2.2 text contrast · 1.4.3 and 1.4.6</p>
+    </footer>
+</div>
+</body>
+</html>
