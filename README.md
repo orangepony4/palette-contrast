@@ -6,7 +6,7 @@ Check text and background colors, then compare an entire palette before using it
 
 ## Use the tool
 
-[Open Palette Contrast](https://orangepony4.github.io/palette-contrast/) · [Download the v0.1.0 offline ZIP](https://github.com/orangepony4/palette-contrast/releases/download/v0.1.0/palette-contrast-0.1.0-offline.zip)
+[Open Palette Contrast](https://orangepony4.github.io/palette-contrast/) · [Get the offline ZIP from the latest release](https://github.com/orangepony4/palette-contrast/releases/latest)
 
 For offline use, extract the ZIP and open `index.html`. Enter text and background colors in hex or use the native color pickers. The preview and contrast checks update as you type.
 

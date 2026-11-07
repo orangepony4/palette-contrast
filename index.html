@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src data:; base-uri 'none'; form-action 'none'">
     <title>Palette Contrast · WCAG text contrast checker</title>
     <meta name="description" content="Check text and background colors against WCAG contrast thresholds and compare a full palette in your browser.">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23231B36'/%3E%3Ccircle cx='28' cy='29' r='15' fill='%23FFDDA7'/%3E%3Ccircle cx='39' cy='37' r='13' fill='%238F79D7'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23245442'/%3E%3Ccircle cx='25' cy='29' r='15' fill='%23fcfbf7'/%3E%3Ccircle cx='39' cy='35' r='14' fill='%237fa990'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
     <script src="contrast.js" defer></script>
     <script src="app.js" defer></script>
@@ -15,7 +15,7 @@
 <div class="page">
     <header class="masthead">
         <p class="brand"><span class="brand-mark" aria-hidden="true"></span> Palette Contrast</p>
-        <p class="local-label">Runs in your browser</p>
+        <p class="local-label">Runs locally</p>
     </header>
 
     <main>
@@ -24,17 +24,19 @@
                 <p class="kicker">WCAG 2.2 · Text contrast</p>
                 <h1>Check text contrast</h1>
             </div>
-            <p class="intro-copy">Test a foreground and background pair, then see which colors in your palette work together.</p>
+            <p class="intro-copy">Test a text and background pair, then find the combinations in your palette that meet WCAG.</p>
         </div>
         <noscript><p class="noscript">Enable JavaScript in your browser to calculate contrast.</p></noscript>
 
-        <section class="surface" aria-labelledby="pairHeading">
+        <section class="surface pair" aria-labelledby="pairHeading">
             <div class="section-heading">
                 <div>
-                    <p class="kicker">01 · Contrast</p>
-                    <h2 id="pairHeading">Check a color pair</h2>
+                    <p class="kicker">01 / Color pair</p>
+                    <h2 id="pairHeading">Text and background</h2>
                 </div>
-                <button class="button secondary" type="button" id="swapPair"><span aria-hidden="true">⇄</span> Swap colors</button>
+                <button class="button secondary" type="button" id="swapPair" aria-label="Swap colors" title="Swap colors">
+                    <span class="swap-icon" aria-hidden="true">⇄</span><span class="swap-label">Swap colors</span>
+                </button>
             </div>
 
             <div class="pair-grid">
@@ -63,14 +65,7 @@
                         <button class="button secondary" type="button" id="bestText" aria-describedby="bestTextHint">Use suggested text</button>
                     </div>
 
-                    <div class="css-export">
-                        <div class="label-row">
-                            <label for="cssOutput">CSS declarations</label>
-                            <button class="button secondary" type="button" id="copyCss">Copy CSS</button>
-                        </div>
-                        <textarea id="cssOutput" rows="4" readonly spellcheck="false"></textarea>
-                        <p class="form-message" id="actionStatus" role="status"></p>
-                    </div>
+                    <p class="form-message" id="actionStatus" role="status"></p>
                 </div>
 
                 <div class="preview-result">
@@ -79,98 +74,107 @@
                         <p class="preview-title">Readable by design</p>
                         <p class="preview-copy">This sample uses your foreground and background colors.</p>
                     </div>
+                </div>
+
+                <div class="thresholds">
                     <div class="ratio-strip">
-                        <div>
-                            <p id="ratioLabel" class="kicker">Contrast ratio</p>
-                            <output id="ratioValue" aria-labelledby="ratioLabel" aria-live="polite" aria-atomic="true">—</output>
-                        </div>
-                        <p class="help">Higher ratios give text more contrast against the background.</p>
+                        <p id="ratioLabel" class="kicker">Contrast ratio</p>
+                        <output id="ratioValue" aria-labelledby="ratioLabel" aria-live="polite" aria-atomic="true">—</output>
                     </div>
+                    <h3 class="sr-only">WCAG text thresholds</h3>
+                    <dl class="threshold-grid">
+                        <div class="threshold-card">
+                            <dt><strong>AA · Normal</strong><small>4.5:1</small></dt>
+                            <dd id="statusNormalAA" class="check-pill">—</dd>
+                        </div>
+                        <div class="threshold-card">
+                            <dt><strong>AA · Large</strong><small>3:1</small></dt>
+                            <dd id="statusLargeAA" class="check-pill">—</dd>
+                        </div>
+                        <div class="threshold-card">
+                            <dt><strong>AAA · Normal</strong><small>7:1</small></dt>
+                            <dd id="statusNormalAAA" class="check-pill">—</dd>
+                        </div>
+                        <div class="threshold-card">
+                            <dt><strong>AAA · Large</strong><small>4.5:1</small></dt>
+                            <dd id="statusLargeAAA" class="check-pill">—</dd>
+                        </div>
+                    </dl>
+                    <p class="help">Large text is 24 CSS px or larger, or about 18.7 px and bold.</p>
                 </div>
             </div>
 
-            <div class="thresholds">
-                <div class="threshold-heading">
-                    <h3>WCAG text thresholds</h3>
-                    <p class="help">Large text starts at 18 pt (24 CSS px), or 14 pt (about 18.7 CSS px) in bold type.</p>
-                </div>
-                <dl class="threshold-grid">
-                    <div class="threshold-card">
-                        <dt><strong>AA · Normal</strong><small>4.5:1 minimum</small></dt>
-                        <dd id="statusNormalAA" class="check-pill">—</dd>
-                    </div>
-                    <div class="threshold-card">
-                        <dt><strong>AA · Large</strong><small>3:1 minimum</small></dt>
-                        <dd id="statusLargeAA" class="check-pill">—</dd>
-                    </div>
-                    <div class="threshold-card">
-                        <dt><strong>AAA · Normal</strong><small>7:1 minimum</small></dt>
-                        <dd id="statusNormalAAA" class="check-pill">—</dd>
-                    </div>
-                    <div class="threshold-card">
-                        <dt><strong>AAA · Large</strong><small>4.5:1 minimum</small></dt>
-                        <dd id="statusLargeAAA" class="check-pill">—</dd>
-                    </div>
-                </dl>
-                <div class="adjustment">
-                    <div>
+            <details class="pair-tools">
+                <summary>Adjust foreground or copy CSS</summary>
+                <div class="pair-tools-grid">
+                    <div class="adjustment">
                         <h3>Adjust foreground</h3>
-                        <p class="help" id="adjustHelp">The adjustment mixes the foreground toward black or white and keeps its opacity.</p>
-                    </div>
-                    <div class="adjustment-controls">
-                        <div>
-                            <label for="adjustMinimum">Minimum contrast</label>
-                            <select id="adjustMinimum">
-                                <option value="3">3:1</option>
-                                <option value="4.5" selected>4.5:1</option>
-                                <option value="7">7:1</option>
-                            </select>
+                        <p class="help" id="adjustHelp">Mix the text color toward black or white while keeping its opacity.</p>
+                        <div class="adjustment-controls">
+                            <div>
+                                <label for="adjustMinimum">Minimum contrast</label>
+                                <select id="adjustMinimum">
+                                    <option value="3">3:1</option>
+                                    <option value="4.5" selected>4.5:1</option>
+                                    <option value="7">7:1</option>
+                                </select>
+                            </div>
+                            <button class="button primary" type="button" id="adjustText" aria-describedby="adjustHelp">Adjust text color</button>
                         </div>
-                        <button class="button primary" type="button" id="adjustText" aria-describedby="adjustHelp">Adjust text color</button>
+                        <p class="form-message" id="adjustStatus" role="status"></p>
                     </div>
-                    <p class="form-message adjustment-status" id="adjustStatus" role="status"></p>
+                    <div class="css-export">
+                        <div class="label-row">
+                            <label for="cssOutput">CSS declarations</label>
+                            <button class="button secondary" type="button" id="copyCss">Copy CSS</button>
+                        </div>
+                        <textarea id="cssOutput" rows="2" readonly spellcheck="false"></textarea>
+                        <p class="form-message" id="cssStatus" role="status"></p>
+                    </div>
                 </div>
-            </div>
+            </details>
         </section>
 
         <section class="surface palette" aria-labelledby="paletteHeading">
             <div class="section-heading">
                 <div>
-                    <p class="kicker">02 · Palette</p>
+                    <p class="kicker">02 / Palette</p>
                     <h2 id="paletteHeading">Compare a palette</h2>
                 </div>
                 <span class="section-note">AA normal text · 4.5:1</span>
             </div>
-            <div class="palette-controls">
-                <div>
-                    <label for="paletteInput">Palette colors</label>
-                    <textarea id="paletteInput" rows="2" spellcheck="false" aria-describedby="paletteHelp paletteError">#231B36 #FFDDA7 #8F79D7 #F7F4FF #5B4D68</textarea>
-                    <p class="help" id="paletteHelp">Enter 2–12 opaque hex colors. Separate them with spaces, line breaks, commas, or semicolons.</p>
+            <div class="palette-body">
+                <div class="palette-controls">
+                    <div>
+                        <label for="paletteInput">Palette colors</label>
+                        <textarea id="paletteInput" rows="1" spellcheck="false" aria-describedby="paletteHelp paletteError">#231B36 #FFDDA7 #8F79D7 #F7F4FF #5B4D68</textarea>
+                        <p class="help" id="paletteHelp">Enter 2–12 opaque hex colors. Separate them with spaces, line breaks, commas, or semicolons.</p>
+                    </div>
+                    <button class="button primary" type="button" id="buildPalette">Build matrix</button>
                 </div>
-                <button class="button primary" type="button" id="buildPalette">Build matrix</button>
-            </div>
-            <p class="form-message error" id="paletteError" role="status"></p>
+                <p class="form-message error" id="paletteError" role="status"></p>
 
-            <div class="matrix-intro">
-                <div>
-                    <h3>Contrast matrix</h3>
-                    <p class="help" id="matrixHelp">Foreground colors are rows and backgrounds are columns. Arrow keys move between cells, and Home and End move to the ends of a row. Enter or Space loads the pair above.</p>
+                <div class="matrix-intro">
+                    <div>
+                        <h3>Contrast matrix</h3>
+                        <p class="help" id="matrixHelp">Rows are text colors. Columns are backgrounds. Use arrow keys, Home or End to move and Enter or Space to test a pair.</p>
+                    </div>
+                    <p class="selected-pair" id="selectedPair" role="status"></p>
                 </div>
-                <p class="selected-pair" id="selectedPair" role="status"></p>
-            </div>
-            <div id="matrixRegion" class="matrix-region" role="region" aria-label="Palette contrast matrix" aria-describedby="matrixHelp" tabindex="0">
-                <table id="matrixTable" class="matrix-table" aria-label="Foreground and background contrast ratios"></table>
-            </div>
-            <div class="share-panel">
-                <div class="label-row">
-                    <p id="shareHelp" class="help">Share the selected colors and the current matrix in one link.</p>
-                    <button class="button secondary" type="button" id="copyShare" aria-describedby="shareHelp" disabled>Copy share link</button>
+                <div id="matrixRegion" class="matrix-region" role="region" aria-label="Palette contrast matrix" aria-describedby="matrixHelp" tabindex="0">
+                    <table id="matrixTable" class="matrix-table" aria-label="Foreground and background contrast ratios"></table>
                 </div>
-                <div id="shareFallback" hidden>
-                    <label for="shareOutput">Share link</label>
-                    <input id="shareOutput" type="text" readonly spellcheck="false">
+                <div class="share-panel">
+                    <div class="label-row">
+                        <p id="shareHelp" class="help">Share the selected colors and the current matrix in one link.</p>
+                        <button class="button secondary" type="button" id="copyShare" aria-describedby="shareHelp" disabled>Copy share link</button>
+                    </div>
+                    <div id="shareFallback" hidden>
+                        <label for="shareOutput">Share link</label>
+                        <input id="shareOutput" type="text" readonly spellcheck="false">
+                    </div>
+                    <p class="form-message" id="shareStatus" role="status"></p>
                 </div>
-                <p class="form-message" id="shareStatus" role="status"></p>
             </div>
         </section>
     </main>

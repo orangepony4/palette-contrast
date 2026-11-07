@@ -18,6 +18,7 @@
     const swapPair = byId('swapPair');
     const copyCss = byId('copyCss');
     const cssOutput = byId('cssOutput');
+    const cssStatus = byId('cssStatus');
     const actionStatus = byId('actionStatus');
     const adjustMinimum = byId('adjustMinimum');
     const adjustText = byId('adjustText');
@@ -67,6 +68,7 @@
 
     function refreshPair() {
         actionStatus.textContent = '';
+        cssStatus.textContent = '';
         adjustStatus.textContent = '';
         foreground = parseHex(foregroundHex.value);
         background = parseHex(backgroundHex.value, { allowAlpha: false });
@@ -282,11 +284,11 @@
         if (!cssOutput.value) return;
         try {
             await navigator.clipboard.writeText(cssOutput.value);
-            actionStatus.textContent = 'CSS copied.';
+            cssStatus.textContent = 'CSS copied.';
         } catch {
             cssOutput.focus();
             cssOutput.select();
-            actionStatus.textContent = 'CSS selected. Press Ctrl+C or Command+C to copy it.';
+            cssStatus.textContent = 'CSS selected. Press Ctrl+C or Command+C to copy it.';
         }
     });
     copyShare.addEventListener('click', async () => {
