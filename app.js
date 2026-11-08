@@ -43,6 +43,7 @@
     let matrixColors = [];
     let matrixButtons = [];
     let matrixTabStop = null;
+    let cssAttempt;
     let shareAttempt;
 
     function ratioLabel(ratio) {
@@ -67,6 +68,7 @@
     }
 
     function refreshPair() {
+        cssAttempt = null;
         actionStatus.textContent = '';
         cssStatus.textContent = '';
         adjustStatus.textContent = '';
@@ -281,11 +283,17 @@
         }
     });
     copyCss.addEventListener('click', async () => {
-        if (!cssOutput.value) return;
+        const css = cssOutput.value;
+        if (!css) return;
+        const attempt = Symbol();
+        cssAttempt = attempt;
+        cssStatus.textContent = '';
         try {
-            await navigator.clipboard.writeText(cssOutput.value);
+            await navigator.clipboard.writeText(css);
+            if (cssAttempt !== attempt) return;
             cssStatus.textContent = 'CSS copied.';
         } catch {
+            if (cssAttempt !== attempt) return;
             cssOutput.focus();
             cssOutput.select();
             cssStatus.textContent = 'CSS selected. Press Ctrl+C or Command+C to copy it.';
