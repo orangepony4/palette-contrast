@@ -333,6 +333,8 @@
     matrixTable.addEventListener('keydown', event => {
         const button = event.target.closest('.matrix-cell');
         if (!button) return;
+        if (event.altKey || event.metaKey || event.shiftKey ||
+            (event.ctrlKey && event.key !== 'Home' && event.key !== 'End')) return;
         let row = Number(button.dataset.row);
         let column = Number(button.dataset.column);
         const last = matrixButtons.length - 1;
