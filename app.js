@@ -282,6 +282,14 @@
             adjustStatus.textContent = `Adjusted text to ${candidate.hex} at ${ratioLabel(candidate.ratio)}.`;
         }
     });
+
+    function selectClipboardFallback(trigger, field) {
+        if (document.activeElement !== trigger) return false;
+        field.focus();
+        field.select();
+        return true;
+    }
+
     copyCss.addEventListener('click', async () => {
         const css = cssOutput.value;
         if (!css) return;
@@ -294,9 +302,9 @@
             cssStatus.textContent = 'CSS copied.';
         } catch {
             if (cssAttempt !== attempt) return;
-            cssOutput.focus();
-            cssOutput.select();
-            cssStatus.textContent = 'CSS selected. Press Ctrl+C or Command+C to copy it.';
+            cssStatus.textContent = selectClipboardFallback(copyCss, cssOutput)
+                ? 'CSS selected. Press Ctrl+C or Command+C to copy it.'
+                : 'Clipboard unavailable. Copy the CSS declarations manually.';
         }
     });
     copyShare.addEventListener('click', async () => {
@@ -318,9 +326,9 @@
             if (shareAttempt !== attempt) return;
             shareFallback.hidden = false;
             shareOutput.value = url;
-            shareOutput.focus();
-            shareOutput.select();
-            shareStatus.textContent = 'Link selected. Press Ctrl+C or Command+C to copy it.';
+            shareStatus.textContent = selectClipboardFallback(copyShare, shareOutput)
+                ? 'Link selected. Press Ctrl+C or Command+C to copy it.'
+                : 'Clipboard unavailable. Copy the URL from the Share link field.';
         }
     });
     byId('buildPalette').addEventListener('click', buildMatrix);
