@@ -526,6 +526,12 @@ textarea[readonly] { background: var(--tint); }
 }
 
 @media (forced-colors: active) {
+    /* The preview and swatches represent the user's chosen colors. */
+    .preview:not([data-invalid="true"]), .matrix-swatch {
+        forced-color-adjust: none;
+        border-color: CanvasText;
+    }
+
     .matrix-cell[aria-pressed="true"] { border: 2px solid Highlight; }
     .matrix-cell:focus-visible { outline-color: Highlight; }
 }
