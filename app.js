@@ -25,6 +25,7 @@
     const adjustStatus = byId('adjustStatus');
     const paletteInput = byId('paletteInput');
     const paletteError = byId('paletteError');
+    const matrixRegion = byId('matrixRegion');
     const matrixTable = byId('matrixTable');
     const selectedPair = byId('selectedPair');
     const copyShare = byId('copyShare');
@@ -193,6 +194,9 @@
         paletteError.textContent = '';
         matrixColors = colors;
         refreshShare();
+        const activeElement = document.activeElement;
+        const focusedCell = matrixTable.contains(activeElement) && activeElement.matches('.matrix-cell')
+            ? activeElement : null;
         const parsed = colors.map(hex => parseHex(hex, { allowAlpha: false }));
         const caption = document.createElement('caption');
         caption.className = 'sr-only';
@@ -218,7 +222,15 @@
         matrixTable.replaceChildren(caption, head, body);
         matrixTabStop = null;
         refreshMatrixSelection();
-        setMatrixTabStop(matrixTable.querySelector('[aria-pressed="true"]') || matrixButtons[0][0]);
+
+        let replacement;
+        if (focusedCell) {
+            const row = colors.indexOf(focusedCell.dataset.foreground);
+            const column = colors.indexOf(focusedCell.dataset.background);
+            replacement = matrixButtons[row]?.[column];
+        }
+        setMatrixTabStop(replacement || matrixTable.querySelector('[aria-pressed="true"]') || matrixButtons[0][0]);
+        if (focusedCell) (replacement || matrixRegion).focus();
     }
 
     function refreshShare() {
