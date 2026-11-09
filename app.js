@@ -233,11 +233,16 @@
         if (focusedCell) (replacement || matrixRegion).focus();
     }
 
+    function clearShareFallback() {
+        if (document.activeElement === shareOutput) copyShare.focus();
+        shareFallback.hidden = true;
+        shareOutput.value = '';
+    }
+
     function refreshShare() {
         shareAttempt = null;
         copyShare.disabled = !foreground || !background || matrixColors.length < 2;
-        shareFallback.hidden = true;
-        shareOutput.value = '';
+        clearShareFallback();
         shareStatus.textContent = '';
     }
 
@@ -331,8 +336,7 @@
         try {
             await navigator.clipboard.writeText(url);
             if (shareAttempt !== attempt) return;
-            shareFallback.hidden = true;
-            shareOutput.value = '';
+            clearShareFallback();
             shareStatus.textContent = 'Share link copied.';
         } catch {
             if (shareAttempt !== attempt) return;
