@@ -241,6 +241,20 @@
         if (matrixTabStop) matrixTabStop.tabIndex = 0;
     }
 
+    function revealMatrixCell(button) {
+        const rowHeading = button.closest('tr').firstElementChild;
+        const left = rowHeading.getBoundingClientRect().right;
+        const right = matrixRegion.getBoundingClientRect().left + matrixRegion.clientLeft + matrixRegion.clientWidth;
+        const cell = button.getBoundingClientRect();
+        if (cell.width > right - left) {
+            matrixRegion.scrollLeft += (cell.left + cell.right - left - right) / 2;
+        } else if (cell.left < left) {
+            matrixRegion.scrollLeft += cell.left - left;
+        } else if (cell.right > right) {
+            matrixRegion.scrollLeft += cell.right - right;
+        }
+    }
+
     function translateMatrixCell(button) {
         const [ratio, indicator] = button.children;
         const indicatorText = translate(button.dataset.pass === 'true' ? 'matrixPass' : 'matrixFail');
@@ -499,18 +513,7 @@
     byId('buildPalette').addEventListener('click', buildMatrix);
     matrixTable.addEventListener('focusin', event => {
         const button = event.target.closest('.matrix-cell');
-        if (!button) return;
-        const rowHeading = button.closest('tr').firstElementChild;
-        const left = rowHeading.getBoundingClientRect().right;
-        const right = matrixRegion.getBoundingClientRect().left + matrixRegion.clientLeft + matrixRegion.clientWidth;
-        const cell = button.getBoundingClientRect();
-        if (cell.width > right - left) {
-            matrixRegion.scrollLeft += (cell.left + cell.right - left - right) / 2;
-        } else if (cell.left < left) {
-            matrixRegion.scrollLeft += cell.left - left;
-        } else if (cell.right > right) {
-            matrixRegion.scrollLeft += cell.right - right;
-        }
+        if (button) revealMatrixCell(button);
     });
     matrixTable.addEventListener('click', event => {
         const button = event.target.closest('.matrix-cell');
@@ -544,7 +547,12 @@
         event.preventDefault();
         const next = matrixButtons[row][column];
         setMatrixTabStop(next);
-        next.focus();
+        if (next === button) {
+            next.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            revealMatrixCell(next);
+        } else {
+            next.focus();
+        }
     });
 
     languageToggle.addEventListener('click', () => {
