@@ -18,6 +18,7 @@ For offline use, extract the ZIP and open `index.html`. Enter text and backgroun
 
 - The text color accepts `#RGB`, `#RGBA`, `#RRGGBB`, and `#RRGGBBAA`. A translucent text color is composited over the selected opaque background.
 - Paste two to twelve different opaque colors, separated by spaces, newlines, commas, or semicolons, to build a palette matrix. Rows are text colors and columns are backgrounds.
+- Text-color labels stay visible as you scroll across a wide matrix.
 - Select a cell to apply the pair. In the matrix, use the arrow keys to move, Home and End to reach row edges, and Enter or Space to apply.
 - Try black or white text, swap opaque colors, or copy the selected pair as CSS.
 - To keep a similar foreground, choose a threshold and select **Adjust text color**. The tool mixes the current color toward black or white by the smallest tested amount that passes, while keeping its opacity and the background.
@@ -55,6 +56,7 @@ Released under the [MIT License](LICENSE).
 
 - Для текста подходят `#RGB`, `#RGBA`, `#RRGGBB` и `#RRGGBBAA`. Полупрозрачный цвет текста накладывается на непрозрачный фон.
 - Введите от 2 до 12 разных непрозрачных цветов через пробел, перенос строки, запятую или точку с запятой. В строках таблицы будут цвета текста, в столбцах — цвета фона.
+- При горизонтальной прокрутке таблицы цвет текста остаётся виден в начале строки.
 - Чтобы проверить пару, выберите ячейку. В таблице можно перемещаться стрелками, переходить к краям строки клавишами Home и End и применять пару клавишей Enter или пробелом.
 - Программа подскажет, чёрный или белый текст лучше виден на выбранном фоне. Непрозрачные цвета можно поменять местами, а текущую пару скопировать как CSS.
 - Для подбора похожего цвета выберите минимальный контраст и нажмите **Подобрать цвет текста**. Программа приблизит цвет к чёрному или белому и сохранит его прозрачность.

@@ -421,6 +421,7 @@ textarea[readonly] { background: var(--tint); }
 .selected-pair { font-weight: 660; }
 
 .matrix-region {
+    container: palette-matrix / inline-size;
     position: relative;
     overflow-x: auto;
     border: 1px solid var(--line);
@@ -452,7 +453,12 @@ textarea[readonly] { background: var(--tint); }
     white-space: nowrap;
 }
 
-.matrix-table th[scope="row"], .matrix-table thead th:first-child { text-align: left; }
+.matrix-table th[scope="row"], .matrix-table thead th:first-child {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 1;
+    text-align: left;
+}
 .matrix-table td { padding: 0; }
 .matrix-color { display: inline-flex; align-items: center; gap: .28rem; }
 
@@ -488,6 +494,13 @@ textarea[readonly] { background: var(--tint); }
 .matrix-cell small { font-size: .6875rem; font-weight: 620; }
 .matrix-cell[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--accent); }
 .matrix-cell:focus-visible { outline-offset: -5px; }
+
+@container palette-matrix (max-width: 15rem) {
+    .matrix-table th { padding-inline: .18rem; font-size: .65rem; }
+    .matrix-color { flex-direction: column; align-items: flex-start; gap: .1rem; }
+    .matrix-cell { min-width: 3rem; padding-inline: .15rem; white-space: normal; overflow-wrap: anywhere; }
+    .matrix-cell strong { font-size: .7rem; white-space: nowrap; }
+}
 
 .share-panel { margin-top: .7rem; padding-top: .65rem; border-top: 1px solid var(--line); }
 .share-panel .help { margin: 0; }

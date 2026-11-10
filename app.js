@@ -54,7 +54,7 @@
         matrixFail: ['Below AA', 'Ниже AA'],
         matrixCell: ['{0} {1}, {2} text on {3}', '{0}, {1}, текст {2} на фоне {3}'],
         matrixCaption: ['Text colors as rows and backgrounds as columns', 'Цвета текста по строкам и цвета фона по столбцам'],
-        matrixCorner: ['Text / background', 'Текст / фон'],
+        matrixCorner: ['Text', 'Текст'],
         invalidPalette: ['Use opaque hex colors. Check {0}.', 'Введите непрозрачные HEX-цвета. Проверьте {0}.'],
         paletteOverflow: ['Use at most 12 different colors.', 'Используйте не больше 12 разных цветов.'],
         paletteShort: ['Enter at least two different opaque hex colors.', 'Введите хотя бы два разных непрозрачных HEX-цвета.'],
@@ -497,6 +497,21 @@
         }
     });
     byId('buildPalette').addEventListener('click', buildMatrix);
+    matrixTable.addEventListener('focusin', event => {
+        const button = event.target.closest('.matrix-cell');
+        if (!button) return;
+        const rowHeading = button.closest('tr').firstElementChild;
+        const left = rowHeading.getBoundingClientRect().right;
+        const right = matrixRegion.getBoundingClientRect().left + matrixRegion.clientLeft + matrixRegion.clientWidth;
+        const cell = button.getBoundingClientRect();
+        if (cell.width > right - left) {
+            matrixRegion.scrollLeft += (cell.left + cell.right - left - right) / 2;
+        } else if (cell.left < left) {
+            matrixRegion.scrollLeft += cell.left - left;
+        } else if (cell.right > right) {
+            matrixRegion.scrollLeft += cell.right - right;
+        }
+    });
     matrixTable.addEventListener('click', event => {
         const button = event.target.closest('.matrix-cell');
         if (!button) return;
