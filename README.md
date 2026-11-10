@@ -22,6 +22,7 @@ For offline use, extract the ZIP and open `index.html`. Enter text and backgroun
 - Try black or white text, swap opaque colors, or copy the selected pair as CSS.
 - To keep a similar foreground, choose a threshold and select **Adjust text color**. The tool mixes the current color toward black or white by the smallest tested amount that passes, while keeping its opacity and the background.
 - Use **Copy share link** to share the current pair and built matrix. The colors are stored in the URL fragment and the app makes no network request when you copy the link.
+- When you follow a share link in the same tab, going back to the plain tool URL restores your editable draft. Going forward opens the shared colors again.
 
 ### How the checks work
 
@@ -58,6 +59,7 @@ Released under the [MIT License](LICENSE).
 - Программа подскажет, чёрный или белый текст лучше виден на выбранном фоне. Непрозрачные цвета можно поменять местами, а текущую пару скопировать как CSS.
 - Для подбора похожего цвета выберите минимальный контраст и нажмите **Подобрать цвет текста**. Программа приблизит цвет к чёрному или белому и сохранит его прозрачность.
 - Кнопка **Копировать ссылку** сохраняет выбранную пару и текущую таблицу в адресе. При копировании приложение не отправляет сетевой запрос.
+- Если открыть ссылку с палитрой в той же вкладке, переход назад к обычному адресу вернёт ваши черновые значения. Переход вперёд снова откроет цвета из ссылки.
 
 ### Как рассчитывается контраст
 

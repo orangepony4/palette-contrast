@@ -93,6 +93,7 @@
     let matrixTabStop = null;
     let cssAttempt;
     let shareAttempt;
+    let workspaceDraft;
 
     function translate(key, ...args) {
         const message = messages[key][language === 'ru' ? 1 : 0];
@@ -229,7 +230,7 @@
     function setMatrixTabStop(button) {
         if (matrixTabStop) matrixTabStop.tabIndex = -1;
         matrixTabStop = button;
-        matrixTabStop.tabIndex = 0;
+        if (matrixTabStop) matrixTabStop.tabIndex = 0;
     }
 
     function translateMatrixCell(button) {
@@ -280,6 +281,10 @@
 
         paletteInput.setAttribute('aria-invalid', 'false');
         setMessage(paletteError);
+        renderMatrix(colors);
+    }
+
+    function renderMatrix(colors, draftTabStop) {
         matrixColors = colors;
         refreshShare();
         const activeElement = document.activeElement;
@@ -311,18 +316,19 @@
         matrixTabStop = null;
         refreshMatrixSelection();
 
-        let replacement;
-        if (focusedCell) {
-            const row = colors.indexOf(focusedCell.dataset.foreground);
-            const column = colors.indexOf(focusedCell.dataset.background);
-            replacement = matrixButtons[row]?.[column];
-        }
-        setMatrixTabStop(replacement || matrixTable.querySelector('[aria-pressed="true"]') || matrixButtons[0][0]);
+        const cellFor = pair => pair && matrixButtons[colors.indexOf(pair.foreground)]?.[colors.indexOf(pair.background)];
+        const replacement = cellFor(focusedCell?.dataset);
+        const tabStop = replacement || cellFor(draftTabStop) || matrixTable.querySelector('[aria-pressed="true"]') || matrixButtons[0]?.[0];
+        setMatrixTabStop(tabStop);
         if (focusedCell) (replacement || matrixRegion).focus();
     }
 
     function clearShareFallback() {
-        if (document.activeElement === shareOutput) copyShare.focus();
+        if (document.activeElement === shareOutput) {
+            const nextFocus = !copyShare.disabled ? copyShare
+                : !foreground ? foregroundHex : !background ? backgroundHex : paletteInput;
+            nextFocus.focus();
+        }
         shareFallback.hidden = true;
         shareOutput.value = '';
     }
@@ -336,11 +342,38 @@
 
     function restoreShare() {
         const shared = decodeShareState(location.hash);
-        if (!shared) return false;
+        if (!shared) {
+            if (!location.hash && workspaceDraft) {
+                const draft = workspaceDraft;
+                workspaceDraft = undefined;
+                paletteInput.value = draft.palette;
+                foregroundPicker.value = draft.foregroundPicker;
+                backgroundPicker.value = draft.backgroundPicker;
+                applyPair(draft.foreground, draft.background);
+                renderMatrix(draft.colors, draft.tabStop);
+                paletteInput.setAttribute('aria-invalid', String(Boolean(draft.paletteError)));
+                setMessage(paletteError, ...(draft.paletteError ?? []));
+            }
+            return;
+        }
+        // Shared fragments can change repeatedly while the editable workspace waits at the plain URL.
+        workspaceDraft ??= {
+            foreground: foregroundHex.value,
+            background: backgroundHex.value,
+            foregroundPicker: foregroundPicker.value,
+            backgroundPicker: backgroundPicker.value,
+            // Unapplied text may be different from the palette shown in the matrix.
+            palette: paletteInput.value,
+            colors: matrixColors,
+            paletteError: visibleMessages.get(paletteError),
+            tabStop: matrixTabStop && {
+                foreground: matrixTabStop.dataset.foreground,
+                background: matrixTabStop.dataset.background,
+            },
+        };
         paletteInput.value = shared.palette.join(' ');
         applyPair(shared.foreground, shared.background);
         buildMatrix();
-        return true;
     }
 
     foregroundHex.addEventListener('input', refreshPair);
@@ -478,9 +511,8 @@
     });
     applyLanguage();
     languageToggle.hidden = false;
+    refreshPair();
+    buildMatrix();
+    restoreShare();
     window.addEventListener('hashchange', restoreShare);
-    if (!restoreShare()) {
-        refreshPair();
-        buildMatrix();
-    }
 })();
