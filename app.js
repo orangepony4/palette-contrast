@@ -93,6 +93,8 @@
     let matrixTabStop = null;
     let cssAttempt;
     let shareAttempt;
+    const workspaceDrafts = new Map();
+    let workspaceKey;
     let workspaceDraft;
 
     function translate(key, ...args) {
@@ -344,24 +346,22 @@
         setMessage(shareStatus);
     }
 
-    function restoreShare() {
-        const shared = decodeShareState(location.hash);
-        if (!shared) {
-            if (!location.hash && workspaceDraft) {
-                const draft = workspaceDraft;
-                workspaceDraft = undefined;
-                paletteInput.value = draft.palette;
-                foregroundPicker.value = draft.foregroundPicker;
-                backgroundPicker.value = draft.backgroundPicker;
-                applyPair(draft.foreground, draft.background);
-                renderMatrix(draft.colors, draft.tabStop);
-                paletteInput.setAttribute('aria-invalid', String(Boolean(draft.paletteError)));
-                setMessage(paletteError, ...(draft.paletteError ?? []));
-            }
-            return;
+    function workspaceHistoryKey() {
+        const state = history.state;
+        if (state?.paletteContrastWorkspace) return state.paletteContrastWorkspace;
+        try {
+            // The history entry stores only a key. The draft itself stays in the current tab.
+            const key = crypto.getRandomValues(new Uint32Array(2)).join('-');
+            history.replaceState({ ...state, paletteContrastWorkspace: key }, '');
+            return key;
+        } catch {
+            // The most recent draft can still be restored when history state is unavailable.
+            return undefined;
         }
-        // Shared fragments can change repeatedly while the editable workspace waits at the plain URL.
-        workspaceDraft ??= {
+    }
+
+    function rememberWorkspace() {
+        workspaceDraft = {
             foreground: foregroundHex.value,
             background: backgroundHex.value,
             foregroundPicker: foregroundPicker.value,
@@ -375,6 +375,34 @@
                 background: matrixTabStop.dataset.background,
             },
         };
+        if (workspaceKey) workspaceDrafts.set(workspaceKey, workspaceDraft);
+        workspaceKey = undefined;
+    }
+
+    function restoreWorkspace() {
+        const key = workspaceHistoryKey();
+        if (key && key === workspaceKey) return;
+        workspaceKey = key;
+        const draft = workspaceDrafts.get(key) ?? workspaceDraft;
+        workspaceDraft = undefined;
+        if (!draft) return;
+        paletteInput.value = draft.palette;
+        foregroundPicker.value = draft.foregroundPicker;
+        backgroundPicker.value = draft.backgroundPicker;
+        applyPair(draft.foreground, draft.background);
+        renderMatrix(draft.colors, draft.tabStop);
+        paletteInput.setAttribute('aria-invalid', String(Boolean(draft.paletteError)));
+        setMessage(paletteError, ...(draft.paletteError ?? []));
+    }
+
+    function restoreShare() {
+        const shared = decodeShareState(location.hash);
+        if (!shared) {
+            if (!location.hash) restoreWorkspace();
+            return;
+        }
+        // Shared fragments can change repeatedly while the editable workspace waits at the plain URL.
+        if (!workspaceDraft) rememberWorkspace();
         paletteInput.value = shared.palette.join(' ');
         applyPair(shared.foreground, shared.background);
         buildMatrix();
@@ -519,4 +547,13 @@
     buildMatrix();
     restoreShare();
     window.addEventListener('hashchange', restoreShare);
+    window.addEventListener('popstate', () => {
+        const key = history.state?.paletteContrastWorkspace;
+        if (location.hash || !workspaceKey || workspaceKey === key) return;
+        // History can jump between entries with the same URL without a hashchange event.
+        rememberWorkspace();
+        setTimeout(() => {
+            if (!location.hash && history.state?.paletteContrastWorkspace === key) restoreWorkspace();
+        }, 0);
+    });
 })();

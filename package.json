@@ -1,6 +1,6 @@
 {
   "name": "palette-contrast",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "private": true,
   "description": "Check text contrast and compare UI palette pairs in an offline browser tool",
   "scripts": {
