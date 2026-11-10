@@ -152,6 +152,11 @@
         }
     }
 
+    function setActionAvailability(button, unavailableInput) {
+        if (unavailableInput && document.activeElement === button) unavailableInput.focus();
+        button.disabled = Boolean(unavailableInput);
+    }
+
     function refreshPair() {
         cssAttempt = null;
         setMessage(actionStatus);
@@ -163,10 +168,11 @@
         backgroundHex.setAttribute('aria-invalid', String(!background));
         if (foreground) foregroundPicker.value = foreground.hex.slice(0, 7);
         if (background) backgroundPicker.value = background.hex;
-        bestText.disabled = !background;
-        swapPair.disabled = !background || !foreground || foreground.a !== 1;
-        copyCss.disabled = !background || !foreground;
-        adjustText.disabled = !background || !foreground;
+        const invalidInput = !foreground ? foregroundHex : !background ? backgroundHex : null;
+        setActionAvailability(bestText, background ? null : backgroundHex);
+        setActionAvailability(swapPair, invalidInput ?? (foreground.a === 1 ? null : foregroundHex));
+        setActionAvailability(copyCss, invalidInput);
+        setActionAvailability(adjustText, invalidInput);
         refreshShare();
         refreshMatrixSelection();
 
@@ -323,20 +329,18 @@
         if (focusedCell) (replacement || matrixRegion).focus();
     }
 
-    function clearShareFallback() {
-        if (document.activeElement === shareOutput) {
-            const nextFocus = !copyShare.disabled ? copyShare
-                : !foreground ? foregroundHex : !background ? backgroundHex : paletteInput;
-            nextFocus.focus();
-        }
+    function clearShareFallback(nextFocus = copyShare) {
+        if (document.activeElement === shareOutput) nextFocus.focus();
         shareFallback.hidden = true;
         shareOutput.value = '';
     }
 
     function refreshShare() {
         shareAttempt = null;
-        copyShare.disabled = !foreground || !background || matrixColors.length < 2;
-        clearShareFallback();
+        const unavailableInput = !foreground ? foregroundHex : !background ? backgroundHex
+            : matrixColors.length < 2 ? paletteInput : null;
+        setActionAvailability(copyShare, unavailableInput);
+        clearShareFallback(unavailableInput ?? copyShare);
         setMessage(shareStatus);
     }
 
