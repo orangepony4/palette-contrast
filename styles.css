@@ -67,6 +67,13 @@ button:disabled { cursor: not-allowed; opacity: .55; }
     min-height: 60px;
     padding-block: .55rem;
     border-bottom: 1px solid var(--line);
+    column-gap: .65rem;
+}
+
+.masthead-actions {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
 }
 
 .brand {
@@ -117,6 +124,8 @@ button:disabled { cursor: not-allowed; opacity: .55; }
     background: var(--accent);
     content: "";
 }
+
+.masthead .language-toggle { min-width: 2.75rem; font-size: .75rem; }
 
 .intro {
     display: grid;

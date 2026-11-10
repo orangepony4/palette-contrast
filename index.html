@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src data:; base-uri 'none'; form-action 'none'">
-    <title>Palette Contrast · WCAG text contrast checker</title>
+    <title data-ru="Palette Contrast · Проверка контраста текста по WCAG">Palette Contrast · WCAG text contrast checker</title>
     <meta name="description" content="Check text and background colors against WCAG contrast thresholds and compare a full palette in your browser.">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23245442'/%3E%3Ccircle cx='25' cy='29' r='15' fill='%23fcfbf7'/%3E%3Ccircle cx='39' cy='35' r='14' fill='%237fa990'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
@@ -15,27 +15,33 @@
 <div class="page">
     <header class="masthead">
         <p class="brand"><span class="brand-mark" aria-hidden="true"></span> Palette Contrast</p>
-        <p class="local-label">Runs locally</p>
+        <div class="masthead-actions">
+            <p class="local-label" data-ru="Локально">Runs locally</p>
+            <button class="button secondary language-toggle" type="button" id="languageToggle"
+                aria-label="Switch to Russian" title="Switch to Russian" hidden>RU</button>
+        </div>
     </header>
 
     <main>
         <div class="intro">
             <div>
-                <p class="kicker">WCAG 2.2 · Text contrast</p>
-                <h1>Check text contrast</h1>
+                <p class="kicker" data-ru="WCAG 2.2 · Контраст текста">WCAG 2.2 · Text contrast</p>
+                <h1 data-ru="Проверьте контраст текста">Check text contrast</h1>
             </div>
-            <p class="intro-copy">Test a text and background pair, then find the combinations in your palette that meet WCAG.</p>
+            <p class="intro-copy" data-ru="Проверьте контраст текста на выбранном фоне и найдите в палитре сочетания, которые соответствуют WCAG.">Test a text and background pair, then find the combinations in your palette that meet WCAG.</p>
         </div>
-        <noscript><p class="noscript">Enable JavaScript in your browser to calculate contrast.</p></noscript>
+        <noscript><p class="noscript">Enable JavaScript in your browser to calculate contrast.<br>
+            <span lang="ru">Включите JavaScript в браузере, чтобы рассчитать контраст.</span></p></noscript>
 
         <section class="surface pair" aria-labelledby="pairHeading">
             <div class="section-heading">
                 <div>
-                    <p class="kicker">01 / Color pair</p>
-                    <h2 id="pairHeading">Text and background</h2>
+                    <p class="kicker" data-ru="01 / Пара цветов">01 / Color pair</p>
+                    <h2 id="pairHeading" data-ru="Текст и фон">Text and background</h2>
                 </div>
-                <button class="button secondary" type="button" id="swapPair" aria-label="Swap colors" title="Swap colors">
-                    <span class="swap-icon" aria-hidden="true">⇄</span><span class="swap-label">Swap colors</span>
+                <button class="button secondary" type="button" id="swapPair" aria-label="Swap colors" title="Swap colors"
+                    data-ru-label="Поменять цвета местами" data-ru-title="Поменять цвета местами">
+                    <span class="swap-icon" aria-hidden="true">⇄</span><span class="swap-label" data-ru="Поменять цвета">Swap colors</span>
                 </button>
             </div>
 
@@ -43,26 +49,26 @@
                 <div class="pair-controls">
                     <div class="color-fields">
                         <div class="color-field">
-                            <label for="foregroundHex">Foreground</label>
+                            <label for="foregroundHex" data-ru="Цвет текста">Foreground</label>
                             <div class="color-entry">
-                                <input type="color" id="foregroundPicker" value="#ffdda7" aria-label="Pick a foreground color">
+                                <input type="color" id="foregroundPicker" value="#ffdda7" aria-label="Pick a foreground color" data-ru-label="Выбрать цвет текста">
                                 <input type="text" id="foregroundHex" value="#FFDDA7" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hexHelp pairError">
                             </div>
                         </div>
                         <div class="color-field">
-                            <label for="backgroundHex">Background</label>
+                            <label for="backgroundHex" data-ru="Цвет фона">Background</label>
                             <div class="color-entry">
-                                <input type="color" id="backgroundPicker" value="#231b36" aria-label="Pick a background color">
+                                <input type="color" id="backgroundPicker" value="#231b36" aria-label="Pick a background color" data-ru-label="Выбрать цвет фона">
                                 <input type="text" id="backgroundHex" value="#231B36" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hexHelp pairError">
                             </div>
                         </div>
                     </div>
-                    <p class="help" id="hexHelp">Use 3 or 6 hex digits for backgrounds. Foregrounds also accept 4 or 8 digits with alpha.</p>
+                    <p class="help" id="hexHelp" data-ru="Для фона введите 3 или 6 шестнадцатеричных цифр. Для текста подходят также 4 или 8 цифр с прозрачностью.">Use 3 or 6 hex digits for backgrounds. Foregrounds also accept 4 or 8 digits with alpha.</p>
                     <p class="form-message error" id="pairError" role="status"></p>
 
                     <div class="suggestion">
                         <p id="bestTextHint" class="help">Find the stronger black or white text color for this background.</p>
-                        <button class="button secondary" type="button" id="bestText" aria-describedby="bestTextHint">Use suggested text</button>
+                        <button class="button secondary" type="button" id="bestText" aria-describedby="bestTextHint" data-ru="Применить цвет">Use suggested text</button>
                     </div>
 
                     <p class="form-message" id="actionStatus" role="status"></p>
@@ -70,63 +76,63 @@
 
                 <div class="preview-result">
                     <div class="preview" id="preview" aria-hidden="true">
-                        <p class="preview-tag">Live preview</p>
-                        <p class="preview-title">Readable by design</p>
-                        <p class="preview-copy">This sample uses your foreground and background colors.</p>
+                        <p class="preview-tag" data-ru="Предпросмотр">Live preview</p>
+                        <p class="preview-title" data-ru="Текст легко читать">Readable by design</p>
+                        <p class="preview-copy" data-ru="Пример текста и фона в выбранных цветах.">This sample uses your foreground and background colors.</p>
                     </div>
                 </div>
 
                 <div class="thresholds">
                     <div class="ratio-strip">
-                        <p id="ratioLabel" class="kicker">Contrast ratio</p>
+                        <p id="ratioLabel" class="kicker" data-ru="Коэффициент контраста">Contrast ratio</p>
                         <output id="ratioValue" aria-labelledby="ratioLabel" aria-live="polite" aria-atomic="true">—</output>
                     </div>
-                    <h3 class="sr-only">WCAG text thresholds</h3>
+                    <h3 class="sr-only" data-ru="Пороги контраста текста по WCAG">WCAG text thresholds</h3>
                     <dl class="threshold-grid">
                         <div class="threshold-card">
-                            <dt><strong>AA · Normal</strong><small>4.5:1</small></dt>
+                            <dt><strong data-ru="AA · Обычный">AA · Normal</strong><small>4.5:1</small></dt>
                             <dd id="statusNormalAA" class="check-pill">—</dd>
                         </div>
                         <div class="threshold-card">
-                            <dt><strong>AA · Large</strong><small>3:1</small></dt>
+                            <dt><strong data-ru="AA · Крупный">AA · Large</strong><small>3:1</small></dt>
                             <dd id="statusLargeAA" class="check-pill">—</dd>
                         </div>
                         <div class="threshold-card">
-                            <dt><strong>AAA · Normal</strong><small>7:1</small></dt>
+                            <dt><strong data-ru="AAA · Обычный">AAA · Normal</strong><small>7:1</small></dt>
                             <dd id="statusNormalAAA" class="check-pill">—</dd>
                         </div>
                         <div class="threshold-card">
-                            <dt><strong>AAA · Large</strong><small>4.5:1</small></dt>
+                            <dt><strong data-ru="AAA · Крупный">AAA · Large</strong><small>4.5:1</small></dt>
                             <dd id="statusLargeAAA" class="check-pill">—</dd>
                         </div>
                     </dl>
-                    <p class="help">Large text is 24 CSS px or larger, or about 18.7 px and bold.</p>
+                    <p class="help" data-ru="Крупный текст имеет размер от 24 CSS-пикселей или примерно от 18,7 пикселя при полужирном начертании.">Large text is 24 CSS px or larger, or about 18.7 px and bold.</p>
                 </div>
             </div>
 
             <details class="pair-tools">
-                <summary>Adjust foreground or copy CSS</summary>
+                <summary data-ru="Подобрать цвет текста или скопировать CSS">Adjust foreground or copy CSS</summary>
                 <div class="pair-tools-grid">
                     <div class="adjustment">
-                        <h3>Adjust foreground</h3>
-                        <p class="help" id="adjustHelp">Mix the text color toward black or white while keeping its opacity.</p>
+                        <h3 data-ru="Подобрать цвет текста">Adjust foreground</h3>
+                        <p class="help" id="adjustHelp" data-ru="Приблизьте цвет текста к чёрному или белому с сохранением прозрачности.">Mix the text color toward black or white while keeping its opacity.</p>
                         <div class="adjustment-controls">
                             <div>
-                                <label for="adjustMinimum">Minimum contrast</label>
+                                <label for="adjustMinimum" data-ru="Минимальный контраст">Minimum contrast</label>
                                 <select id="adjustMinimum">
                                     <option value="3">3:1</option>
                                     <option value="4.5" selected>4.5:1</option>
                                     <option value="7">7:1</option>
                                 </select>
                             </div>
-                            <button class="button primary" type="button" id="adjustText" aria-describedby="adjustHelp">Adjust text color</button>
+                            <button class="button primary" type="button" id="adjustText" aria-describedby="adjustHelp" data-ru="Подобрать цвет текста">Adjust text color</button>
                         </div>
                         <p class="form-message" id="adjustStatus" role="status"></p>
                     </div>
                     <div class="css-export">
                         <div class="label-row">
-                            <label for="cssOutput">CSS declarations</label>
-                            <button class="button secondary" type="button" id="copyCss">Copy CSS</button>
+                            <label for="cssOutput" data-ru="Правила CSS">CSS declarations</label>
+                            <button class="button secondary" type="button" id="copyCss" data-ru="Копировать CSS">Copy CSS</button>
                         </div>
                         <textarea id="cssOutput" rows="2" readonly spellcheck="false"></textarea>
                         <p class="form-message" id="cssStatus" role="status"></p>
@@ -138,39 +144,39 @@
         <section class="surface palette" aria-labelledby="paletteHeading">
             <div class="section-heading">
                 <div>
-                    <p class="kicker">02 / Palette</p>
-                    <h2 id="paletteHeading">Compare a palette</h2>
+                    <p class="kicker" data-ru="02 / Палитра">02 / Palette</p>
+                    <h2 id="paletteHeading" data-ru="Сравните цвета палитры">Compare a palette</h2>
                 </div>
-                <span class="section-note">AA normal text · 4.5:1</span>
+                <span class="section-note" data-ru="AA для обычного текста · 4.5:1">AA normal text · 4.5:1</span>
             </div>
             <div class="palette-body">
                 <div class="palette-controls">
                     <div>
-                        <label for="paletteInput">Palette colors</label>
+                        <label for="paletteInput" data-ru="Цвета палитры">Palette colors</label>
                         <textarea id="paletteInput" rows="1" spellcheck="false" aria-describedby="paletteHelp paletteError">#231B36 #FFDDA7 #8F79D7 #F7F4FF #5B4D68</textarea>
-                        <p class="help" id="paletteHelp">Enter 2–12 opaque hex colors. Separate them with spaces, line breaks, commas, or semicolons.</p>
+                        <p class="help" id="paletteHelp" data-ru="Введите от 2 до 12 непрозрачных HEX-цветов. Разделяйте их пробелами, переносами строк, запятыми или точками с запятой.">Enter 2–12 opaque hex colors. Separate them with spaces, line breaks, commas, or semicolons.</p>
                     </div>
-                    <button class="button primary" type="button" id="buildPalette">Build matrix</button>
+                    <button class="button primary" type="button" id="buildPalette" data-ru="Построить таблицу">Build matrix</button>
                 </div>
                 <p class="form-message error" id="paletteError" role="status"></p>
 
                 <div class="matrix-intro">
                     <div>
-                        <h3>Contrast matrix</h3>
-                        <p class="help" id="matrixHelp">Rows are text colors. Columns are backgrounds. Use arrow keys, Home or End to move and Enter or Space to test a pair.</p>
+                        <h3 data-ru="Таблица контраста">Contrast matrix</h3>
+                        <p class="help" id="matrixHelp" data-ru="В строках указаны цвета текста, в столбцах — цвета фона. Перемещайтесь стрелками, Home или End. Чтобы проверить пару, нажмите Enter или пробел.">Rows are text colors. Columns are backgrounds. Use arrow keys, Home or End to move and Enter or Space to test a pair.</p>
                     </div>
                     <p class="selected-pair" id="selectedPair" role="status"></p>
                 </div>
-                <div id="matrixRegion" class="matrix-region" role="region" aria-label="Palette contrast matrix" aria-describedby="matrixHelp" tabindex="0">
-                    <table id="matrixTable" class="matrix-table" aria-label="Foreground and background contrast ratios"></table>
+                <div id="matrixRegion" class="matrix-region" role="region" aria-label="Palette contrast matrix" data-ru-label="Таблица контраста цветов палитры" aria-describedby="matrixHelp" tabindex="0">
+                    <table id="matrixTable" class="matrix-table" aria-label="Foreground and background contrast ratios" data-ru-label="Коэффициенты контраста текста и фона"></table>
                 </div>
                 <div class="share-panel">
                     <div class="label-row">
-                        <p id="shareHelp" class="help">Share the selected colors and the current matrix in one link.</p>
-                        <button class="button secondary" type="button" id="copyShare" aria-describedby="shareHelp" disabled>Copy share link</button>
+                        <p id="shareHelp" class="help" data-ru="Поделитесь выбранной парой и текущей палитрой одной ссылкой.">Share the selected colors and the current matrix in one link.</p>
+                        <button class="button secondary" type="button" id="copyShare" aria-describedby="shareHelp" data-ru="Копировать ссылку" disabled>Copy share link</button>
                     </div>
                     <div id="shareFallback" hidden>
-                        <label for="shareOutput">Share link</label>
+                        <label for="shareOutput" data-ru="Ссылка для отправки">Share link</label>
                         <input id="shareOutput" type="text" readonly spellcheck="false">
                     </div>
                     <p class="form-message" id="shareStatus" role="status"></p>
@@ -181,7 +187,7 @@
 
     <footer class="footer">
         <p>Palette Contrast</p>
-        <p>WCAG 2.2 text contrast · 1.4.3 and 1.4.6</p>
+        <p data-ru="Контраст текста по WCAG 2.2 · 1.4.3 и 1.4.6">WCAG 2.2 text contrast · 1.4.3 and 1.4.6</p>
     </footer>
 </div>
 </body>
