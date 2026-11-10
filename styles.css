@@ -313,8 +313,8 @@ textarea[readonly] { background: var(--tint); }
 .preview-copy { max-width: 32ch; font-size: .875rem; }
 
 .preview[data-invalid="true"] { background: var(--surface); color: var(--muted); }
-.preview[data-invalid="true"] > * { display: none; }
-.preview[data-invalid="true"]::after { content: "Enter valid colors to preview."; }
+.preview[data-invalid="true"] > :not(.preview-error),
+.preview:not([data-invalid="true"]) .preview-error { display: none; }
 
 .ratio-strip {
     display: grid;
@@ -503,7 +503,8 @@ textarea[readonly] { background: var(--tint); }
 }
 
 @media (max-width: 51rem) {
-    .intro { grid-template-columns: 1fr; }
+    .intro { grid-template-columns: minmax(0, 1fr); }
+    .intro h1 { overflow-wrap: anywhere; }
     .intro-copy { max-width: 55ch; }
     .pair-grid { grid-template-columns: minmax(0, 1.3fr) minmax(0, .8fr); }
     .pair-controls { grid-column: 1 / -1; border-bottom: 1px solid var(--line); }
@@ -513,17 +514,22 @@ textarea[readonly] { background: var(--tint); }
 
 @media (max-width: 39rem) {
     .section-heading, .pair-tools summary, .palette-body, .pair-tools-grid { padding-inline: .75rem; }
-    .pair .section-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: .45rem; }
+    .pair .section-heading { column-gap: .45rem; }
+    .pair .section-heading > div { flex: 1 1 min(100%, 8rem); min-width: 0; }
+    .section-heading h2, .preview { overflow-wrap: anywhere; }
     #swapPair { min-width: 2.75rem; }
     .swap-label { display: none; }
     .pair-grid, .pair-tools-grid { grid-template-columns: minmax(0, 1fr); }
     .pair-controls, .preview-result, .thresholds { padding: .75rem; }
+    .color-fields, .threshold-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, max(7rem, calc((100% - .65rem) / 2))), 1fr));
+    }
     .preview-result { border-inline: 0; border-bottom: 1px solid var(--line); }
     .preview { min-height: 10.5rem; }
     .suggestion { margin-top: .55rem; padding-top: .5rem; }
     .suggestion .help { flex-basis: 6rem; }
-    .ratio-strip { display: flex; align-items: center; justify-content: space-between; }
-    .threshold-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: .6rem; }
+    .ratio-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+    .threshold-grid { column-gap: .6rem; }
     .threshold-card dt { flex-wrap: wrap; justify-content: start; }
     .palette-controls { grid-template-columns: 1fr; }
     .palette-controls .button { justify-self: start; margin-top: 0; }
