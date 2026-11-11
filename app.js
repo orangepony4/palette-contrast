@@ -510,6 +510,11 @@
             setMessage(shareStatus, selectClipboardFallback(copyShare, shareOutput) ? 'shareSelected' : 'shareManual');
         }
     });
+    paletteInput.addEventListener('input', () => {
+        if (!visibleMessages.has(paletteError)) return;
+        paletteInput.removeAttribute('aria-invalid');
+        setMessage(paletteError);
+    });
     byId('buildPalette').addEventListener('click', buildMatrix);
     matrixTable.addEventListener('focusin', event => {
         const button = event.target.closest('.matrix-cell');
