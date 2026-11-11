@@ -1,7 +1,5 @@
 # Palette Contrast
 
-[![Tests](https://github.com/orangepony4/palette-contrast/actions/workflows/test.yml/badge.svg)](https://github.com/orangepony4/palette-contrast/actions/workflows/test.yml)
-
 [English](#english) · [Русский](#русский)
 
 ## English
@@ -14,7 +12,7 @@ Check text and background colors, then compare an entire palette before using it
 
 For offline use, extract the ZIP and open `index.html`. Enter text and background colors in hex or use the native color pickers. The preview and contrast checks update as you type. The app opens in English on the first visit. Select **RU** in the header to show your current pair and matrix in Russian.
 
-![Palette Contrast showing hex color inputs, a live text preview with a 12.60:1 ratio, WCAG results, and a five-color contrast matrix](docs/preview.webp)
+![Palette Contrast showing hex color inputs, a violet text preview, WCAG results, and a five-color contrast matrix](docs/preview.webp)
 
 - The text color accepts `#RGB`, `#RGBA`, `#RRGGBB`, and `#RRGGBBAA`. A translucent text color is composited over the selected opaque background.
 - Paste two to twelve different opaque colors, separated by spaces, newlines, commas, or semicolons, to build a palette matrix. Rows are text colors and columns are backgrounds.
@@ -38,7 +36,7 @@ Large text is at least 18 points at regular weight or 14 points in bold. These c
 
 ### Development
 
-Run `npm test` with Node.js 20 or newer. The test suite covers hex parsing, luminance, alpha compositing, unrounded threshold decisions, foreground adjustment, palette parsing, and share links.
+Run `npm test` with Node.js 20 or newer. The test suite covers hex parsing, luminance, alpha compositing, unrounded threshold decisions, foreground adjustment, palette parsing, and share links. [Test runs on GitHub](https://github.com/orangepony4/palette-contrast/actions/workflows/test.yml)
 
 Released under the [MIT License](LICENSE).
 
@@ -74,6 +72,6 @@ Released under the [MIT License](LICENSE).
 
 ### Разработка
 
-Запустите `npm test` в Node.js 20 или новее. Тесты проверяют разбор HEX-цветов, яркость, прозрачность, расчёт порогов, подбор цвета, палитру и ссылки.
+Запустите `npm test` в Node.js 20 или новее. Тесты проверяют разбор HEX-цветов, яркость, прозрачность, расчёт порогов, подбор цвета, палитру и ссылки. [Результаты проверок на GitHub](https://github.com/orangepony4/palette-contrast/actions/workflows/test.yml)
 
 Проект распространяется по [лицензии MIT](LICENSE).

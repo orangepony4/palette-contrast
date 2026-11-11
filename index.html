@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src data:; base-uri 'none'; form-action 'none'">
     <title data-ru="Palette Contrast · Проверка контраста текста по WCAG">Palette Contrast · WCAG text contrast checker</title>
     <meta name="description" content="Check text and background colors against WCAG contrast thresholds and compare a full palette in your browser.">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23245442'/%3E%3Ccircle cx='25' cy='29' r='15' fill='%23fcfbf7'/%3E%3Ccircle cx='39' cy='35' r='14' fill='%237fa990'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%234e367c'/%3E%3Ccircle cx='25' cy='29' r='15' fill='%23fcfbf7'/%3E%3Ccircle cx='39' cy='35' r='14' fill='%23bca3ed'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
     <script src="contrast.js" defer></script>
     <script src="app.js" defer></script>
@@ -18,7 +18,7 @@
         <div class="masthead-actions">
             <p class="local-label" data-ru="Локально">Runs locally</p>
             <button class="button secondary language-toggle" type="button" id="languageToggle"
-                aria-label="Switch to Russian" title="Switch to Russian" hidden>RU</button>
+                aria-label="RU · Switch to Russian" title="Switch to Russian" hidden>RU</button>
         </div>
     </header>
 
@@ -51,15 +51,15 @@
                         <div class="color-field">
                             <label for="foregroundHex" data-ru="Цвет текста">Foreground</label>
                             <div class="color-entry">
-                                <input type="color" id="foregroundPicker" value="#ffdda7" aria-label="Pick a foreground color" data-ru-label="Выбрать цвет текста">
-                                <input type="text" id="foregroundHex" value="#FFDDA7" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hexHelp pairError">
+                                <input type="color" id="foregroundPicker" value="#eae4f2" aria-label="Pick a foreground color" data-ru-label="Выбрать цвет текста">
+                                <input type="text" id="foregroundHex" value="#EAE4F2" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hexHelp pairError">
                             </div>
                         </div>
                         <div class="color-field">
                             <label for="backgroundHex" data-ru="Цвет фона">Background</label>
                             <div class="color-entry">
-                                <input type="color" id="backgroundPicker" value="#231b36" aria-label="Pick a background color" data-ru-label="Выбрать цвет фона">
-                                <input type="text" id="backgroundHex" value="#231B36" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hexHelp pairError">
+                                <input type="color" id="backgroundPicker" value="#241d32" aria-label="Pick a background color" data-ru-label="Выбрать цвет фона">
+                                <input type="text" id="backgroundHex" value="#241D32" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hexHelp pairError">
                             </div>
                         </div>
                     </div>
@@ -154,7 +154,7 @@
                 <div class="palette-controls">
                     <div>
                         <label for="paletteInput" data-ru="Цвета палитры">Palette colors</label>
-                        <textarea id="paletteInput" rows="1" spellcheck="false" aria-describedby="paletteHelp paletteError">#231B36 #FFDDA7 #8F79D7 #F7F4FF #5B4D68</textarea>
+                        <textarea id="paletteInput" rows="1" spellcheck="false" aria-describedby="paletteHelp paletteError">#241D32 #EAE4F2 #4E367C #FCFBF7 #A08FC3</textarea>
                         <p class="help" id="paletteHelp" data-ru="Введите от 2 до 12 непрозрачных HEX-цветов. Разделяйте их пробелами, переносами строк, запятыми или точками с запятой.">Enter 2–12 opaque hex colors. Separate them with spaces, line breaks, commas, or semicolons.</p>
                     </div>
                     <button class="button primary" type="button" id="buildPalette" data-ru="Построить таблицу">Build matrix</button>

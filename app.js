@@ -121,7 +121,7 @@
         }
         const switchLabel = translate('switchLanguage');
         languageToggle.textContent = language === 'ru' ? 'EN' : 'RU';
-        languageToggle.setAttribute('aria-label', switchLabel);
+        languageToggle.setAttribute('aria-label', languageToggle.textContent + ' · ' + switchLabel);
         languageToggle.title = switchLabel;
         for (const [element, message] of visibleMessages) element.textContent = translate(...message);
         if (matrixTable.caption) {
