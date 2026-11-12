@@ -1,6 +1,6 @@
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
-const { bestForeground, evaluateContrast, parseHex, parsePalette } = require('../contrast.js');
+const { bestForeground, evaluateContrast, matrixCsv, parseHex, parsePalette } = require('../contrast.js');
 
 function near(actual, expected) {
     assert.ok(Math.abs(actual - expected) < 1e-12, `Expected ${expected}, got ${actual}`);
@@ -68,6 +68,18 @@ test('uses unrounded ratios at the AA and AAA text thresholds', () => {
     assert.equal(evaluateContrast(parseHex('#949494'), white).largeAA, true);
     assert.equal(evaluateContrast(parseHex('#595959'), white).normalAAA, true);
     assert.equal(evaluateContrast(parseHex('#5A5A5A'), white).normalAAA, false);
+});
+
+test('exports all matrix cells in row order with full precision and stable WCAG flags', () => {
+    const lines = matrixCsv(['#6C7B67', '#FFFFFF']).split('\r\n');
+    const { ratio } = evaluateContrast(parseHex('#6C7B67'), parseHex('#FFFFFF'));
+    assert.equal(lines[0], 'foreground,background,contrast_ratio,aa_normal,aa_large,aaa_normal,aaa_large');
+    assert.equal(lines[1], '#6C7B67,#6C7B67,1,false,false,false,false');
+    assert.equal(lines[2], `#6C7B67,#FFFFFF,${ratio},false,true,false,false`);
+    assert.equal(lines[3], `#FFFFFF,#6C7B67,${ratio},false,true,false,false`);
+    assert.equal(lines[4], '#FFFFFF,#FFFFFF,1,false,false,false,false');
+    assert.equal(lines[5], '');
+    assert.equal(lines.length, 6);
 });
 
 test('composites alpha in sRGB before evaluating luminance without rounding channels', () => {

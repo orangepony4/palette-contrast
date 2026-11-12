@@ -502,6 +502,17 @@ textarea[readonly] { background: var(--tint); }
     .matrix-cell strong { font-size: .7rem; white-space: nowrap; }
 }
 
+.matrix-export {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    align-items: center;
+    gap: .3rem .65rem;
+    margin-block: .55rem;
+}
+.matrix-export .form-message { margin: 0; }
+.matrix-export .button { max-inline-size: 100%; overflow-wrap: anywhere; }
+
 .share-panel { margin-top: .7rem; padding-top: .65rem; border-top: 1px solid var(--line); }
 .share-panel .help { margin: 0; }
 #shareFallback { margin-top: .6rem; }

@@ -58,6 +58,18 @@
         };
     }
 
+    function matrixCsv(colors) {
+        const palette = colors.map(hex => parseHex(hex, { allowAlpha: false }));
+        const rows = ['foreground,background,contrast_ratio,aa_normal,aa_large,aaa_normal,aaa_large'];
+        for (const foreground of palette) {
+            for (const background of palette) {
+                const { ratio, normalAA, largeAA, normalAAA, largeAAA } = evaluateContrast(foreground, background);
+                rows.push([foreground.hex, background.hex, ratio, normalAA, largeAA, normalAAA, largeAAA].join(','));
+            }
+        }
+        return rows.join('\r\n') + '\r\n';
+    }
+
     function bestForeground(background) {
         const adjusted = opaqueLuminance(background) + 0.05;
         const blackRatio = adjusted / 0.05;
@@ -151,7 +163,7 @@
     }
 
     const api = {
-        parseHex, evaluateContrast, bestForeground, adjustForeground, parsePalette, encodeShareState, decodeShareState,
+        parseHex, evaluateContrast, matrixCsv, bestForeground, adjustForeground, parsePalette, encodeShareState, decodeShareState,
     };
     if (typeof module === 'object' && module.exports) {
         module.exports = api;

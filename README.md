@@ -18,6 +18,7 @@ For offline use, extract the ZIP and open `index.html`. Enter text and backgroun
 - Paste two to twelve different opaque colors, separated by spaces, newlines, commas, or semicolons, to build a palette matrix. Rows are text colors and columns are backgrounds.
 - Text-color labels stay visible as you scroll across a wide matrix.
 - Select a cell to apply the pair. In the matrix, use the arrow keys to move, Home and End to reach row edges, and Enter or Space to apply.
+- Select **Download matrix CSV** to save every cell of the applied matrix in row order. The file includes text and background hex colors, the full-precision contrast ratio, and the four WCAG pass flags for normal and large text. Column names and values stay the same in English and Russian.
 - Try black or white text, swap opaque colors, or copy the selected pair as CSS.
 - To keep a similar foreground, choose a threshold and select **Adjust text color**. The tool mixes the current color toward black or white by the smallest tested amount that passes, while keeping its opacity and the background.
 - Use **Copy share link** to share the current pair and built matrix. The colors are stored in the URL fragment and the app makes no network request when you copy the link.
@@ -56,6 +57,7 @@ Released under the [MIT License](LICENSE).
 - Введите от 2 до 12 разных непрозрачных цветов через пробел, перенос строки, запятую или точку с запятой. В строках таблицы будут цвета текста, в столбцах — цвета фона.
 - При горизонтальной прокрутке таблицы цвет текста остаётся виден в начале строки.
 - Чтобы проверить пару, выберите ячейку. В таблице можно перемещаться стрелками, переходить к краям строки клавишами Home и End и применять пару клавишей Enter или пробелом.
+- Кнопка **Скачать таблицу CSV** сохраняет все ячейки применённой таблицы по строкам. В файле указаны HEX-цвета текста и фона, коэффициент контраста без округления и четыре результата проверки WCAG для обычного и крупного текста. Названия столбцов и значения одинаковы для обоих языков интерфейса.
 - Программа подскажет, чёрный или белый текст лучше виден на выбранном фоне. Непрозрачные цвета можно поменять местами, а текущую пару скопировать как CSS.
 - Для подбора похожего цвета выберите минимальный контраст и нажмите **Подобрать цвет текста**. Программа приблизит цвет к чёрному или белому и сохранит его прозрачность.
 - Кнопка **Копировать ссылку** сохраняет выбранную пару и текущую таблицу в адресе. При копировании приложение не отправляет сетевой запрос.

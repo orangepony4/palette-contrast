@@ -3,7 +3,7 @@
 
     const {
         parseHex, evaluateContrast, bestForeground, parsePalette,
-        encodeShareState, decodeShareState, adjustForeground,
+        encodeShareState, decodeShareState, adjustForeground, matrixCsv,
     } = globalThis.PaletteContrast;
     const byId = id => document.getElementById(id);
     const foregroundHex = byId('foregroundHex');
@@ -28,6 +28,8 @@
     const matrixRegion = byId('matrixRegion');
     const matrixTable = byId('matrixTable');
     const selectedPair = byId('selectedPair');
+    const downloadMatrix = byId('downloadMatrix');
+    const matrixExportStatus = byId('matrixExportStatus');
     const copyShare = byId('copyShare');
     const shareFallback = byId('shareFallback');
     const shareOutput = byId('shareOutput');
@@ -55,6 +57,7 @@
         matrixCell: ['{0} {1}, {2} text on {3}', '{0}, {1}, текст {2} на фоне {3}'],
         matrixCaption: ['Text colors as rows and backgrounds as columns', 'Цвета текста по строкам и цвета фона по столбцам'],
         matrixCorner: ['Text', 'Текст'],
+        matrixDownloadStarted: ['Matrix CSV download started.', 'Началось скачивание CSV таблицы.'],
         invalidPalette: ['Use opaque hex colors. Check {0}.', 'Введите непрозрачные HEX-цвета. Проверьте {0}.'],
         paletteOverflow: ['Use at most 12 different colors.', 'Используйте не больше 12 разных цветов.'],
         paletteShort: ['Enter at least two different opaque hex colors.', 'Введите хотя бы два разных непрозрачных HEX-цвета.'],
@@ -308,6 +311,8 @@
 
     function renderMatrix(colors, draftTabStop) {
         matrixColors = colors;
+        downloadMatrix.disabled = colors.length < 2;
+        setMessage(matrixExportStatus);
         refreshShare();
         const activeElement = document.activeElement;
         const focusedCell = matrixTable.contains(activeElement) && activeElement.matches('.matrix-cell')
@@ -516,6 +521,19 @@
         setMessage(paletteError);
     });
     byId('buildPalette').addEventListener('click', buildMatrix);
+    downloadMatrix.addEventListener('click', () => {
+        if (downloadMatrix.disabled) return;
+        const csv = new Blob([matrixCsv(matrixColors)], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(csv);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'palette-contrast-matrix.csv';
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        setMessage(matrixExportStatus, 'matrixDownloadStarted');
+    });
     matrixTable.addEventListener('focusin', event => {
         const button = event.target.closest('.matrix-cell');
         if (button) revealMatrixCell(button);
